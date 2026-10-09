@@ -133,7 +133,7 @@ function Hero({ family }: { family: Record<string, any> }) {
           </p>
           <p className={nh.heroDesc} style={stagger(3)}>{family.desc}</p>
           <div className={nh.heroCtas} style={stagger(4)}>
-            <a href="mailto:sales@allbotix.ai?subject=AT20s%20Pro%20%2F%20AT60s%20enquiry" className={`${nh.btn} ${nh.btnPrimary}`}>
+            <a href="mailto:contact@nantatech.com?subject=AT20s%20Pro%20%2F%20AT60s%20enquiry" className={`${nh.btn} ${nh.btnPrimary}`}>
               Talk to us
               <ArrowRight />
             </a>
@@ -336,7 +336,7 @@ function ClosingCta() {
           </p>
           <div className={nh.ctaButtons}>
             <a
-              href="mailto:sales@allbotix.ai?subject=AT20s%20Pro%20%2F%20AT60s%20enquiry"
+              href="mailto:contact@nantatech.com?subject=AT20s%20Pro%20%2F%20AT60s%20enquiry"
               className={`${nh.btn} ${nh.btnPrimary}`}
             >
               Email our team
