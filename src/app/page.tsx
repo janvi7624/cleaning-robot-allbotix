@@ -5,6 +5,7 @@ import NhShell from '@/components/cleaning/NhShell'
 import Reveal from '@/components/cleaning/Reveal'
 import { Eyebrow, SplitHead } from '@/components/cleaning/NhSectionHead'
 import { ArrowRight, ArrowUpRight } from '@/components/cleaning/NhIcons'
+import Clients from '@/components/cleaning/Clients'
 import nh from '@/components/cleaning/cleaning.module.css'
 
 /** Index that orders a hero element in the load sequence. */
@@ -70,6 +71,8 @@ export default async function Home() {
       <Hero family={family} />
 
       <ModelCompare at60s={at60s} at20sPro={at20sPro} />
+
+      <Clients onDark />
 
       {featureBlocks.map((block, i) => (
         <FeatureBlockSection
