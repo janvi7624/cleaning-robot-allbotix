@@ -14,7 +14,8 @@ const stagger = (i: number) => ({ '--i': i }) as CSSProperties
 const band = (onDark: boolean) => `${nh.section} ${onDark ? nh.onDark : ''}`.trim()
 
 // The same photo was reused across these sections, so they carry no pictures:
-// the feature blocks are card grids and the box contents are quantity cards.
+// the feature blocks are text layouts (see FeatureVariant) and the box
+// contents are quantity cards.
 
 type FeatureBlock = {
   sectionLabel: string
@@ -79,7 +80,15 @@ export default async function Home() {
           key={block.title}
           block={block}
           onDark={i % 2 === 0}
-          variant={block === industries ? 'tiles' : 'cards'}
+          variant={
+            block === navigation
+              ? 'list'
+              : block === voiceAssistant
+                ? 'columns'
+                : block === industries
+                  ? 'tiles'
+                  : 'cards'
+          }
         />
       ))}
 
@@ -225,6 +234,18 @@ function cardSpan(count: number, i: number): number {
   return count % 3 === 0 ? 2 : 3
 }
 
+/**
+ * Each feature block gets its own layout so the page doesn't read as one card
+ * grid repeated four times:
+ *  - cards   boxed, numbered cards
+ *  - list    sticky heading beside ruled rows
+ *  - columns open columns with a large outlined number, no boxes
+ *  - tiles   compact marker tiles
+ */
+type FeatureVariant = 'cards' | 'list' | 'columns' | 'tiles'
+
+const num = (i: number) => String(i + 1).padStart(2, '0')
+
 function FeatureBlockSection({
   block,
   onDark,
@@ -232,9 +253,58 @@ function FeatureBlockSection({
 }: {
   block: FeatureBlock
   onDark: boolean
-  variant: 'cards' | 'tiles'
+  variant: FeatureVariant
 }) {
   const count = block.features.length
+
+  if (variant === 'list') {
+    return (
+      <section className={band(onDark)}>
+        <div className={`${nh.shell} ${nh.featSplit}`}>
+          <div className={nh.featSplitHead}>
+            <Reveal>
+              <Eyebrow label={block.sectionLabel} />
+              <h2 className={nh.h2}>{block.title}</h2>
+              <p className={`${nh.body} ${nh.featSplitLead}`}>{block.subtitle}</p>
+            </Reveal>
+          </div>
+
+          <ol className={nh.featRows}>
+            {block.features.map((f, i) => (
+              <Reveal as="li" key={f} delay={Math.min(i, 5) * 0.05} className={nh.featRow}>
+                <span className={nh.featRowNum}>{num(i)}</span>
+                <p className={nh.featRowText}>{f}</p>
+              </Reveal>
+            ))}
+          </ol>
+        </div>
+      </section>
+    )
+  }
+
+  if (variant === 'columns') {
+    return (
+      <section className={band(onDark)}>
+        <div className={nh.shell}>
+          <SplitHead eyebrow={block.sectionLabel} title={block.title} lead={block.subtitle} />
+
+          <ul
+            className={nh.featCols}
+            style={{ '--cols': count % 3 === 0 || count > 4 ? 3 : 2 } as CSSProperties}
+          >
+            {block.features.map((f, i) => (
+              <Reveal as="li" key={f} delay={Math.min(i, 5) * 0.05} className={nh.featCol}>
+                <span className={nh.featColNum} aria-hidden="true">
+                  {num(i)}
+                </span>
+                <p className={nh.featColText}>{f}</p>
+              </Reveal>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
 
   return (
     <section className={band(onDark)}>
@@ -257,7 +327,7 @@ function FeatureBlockSection({
                 </div>
               ) : (
                 <div className={nh.featCard} data-spot>
-                  <span className={nh.featNum}>{String(i + 1).padStart(2, '0')}</span>
+                  <span className={nh.featNum}>{num(i)}</span>
                   <p className={nh.featText}>{f}</p>
                 </div>
               )}
